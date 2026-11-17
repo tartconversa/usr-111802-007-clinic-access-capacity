@@ -1,17 +1,28 @@
 {
   "entities": [
-    {
-      "entity_id": "entity-1",
-      "label": "业务主体一",
-      "group_id": "group-1"
-    }
+    {"entity_id": "entity-1", "label": "业务主体一", "group_id": "group-1"},
+    {"entity_id": "patient-1", "label": "患者甲", "group_id": "patient"},
+    {"entity_id": "patient-2", "label": "患者乙", "group_id": "patient"},
+    {"entity_id": "patient-3", "label": "患者丙", "group_id": "patient"},
+    {"entity_id": "patient-4", "label": "患者丁", "group_id": "patient"},
+    {"entity_id": "room-a", "label": "诊室A", "group_id": "room"},
+    {"entity_id": "room-b", "label": "诊室B", "group_id": "room"}
   ],
   "aliases": [
-    {
-      "source": "system",
-      "external_id": "external-1",
-      "entity_id": "entity-1"
-    }
+    {"source": "system", "external_id": "external-1", "entity_id": "entity-1"},
+    {"source": "booking-system", "external_id": "patient-1", "entity_id": "patient-1"},
+    {"source": "booking-system", "external_id": "patient-2", "entity_id": "patient-2"},
+    {"source": "booking-system", "external_id": "patient-3", "entity_id": "patient-3"},
+    {"source": "booking-system", "external_id": "patient-4", "entity_id": "patient-4"},
+    {"source": "room-system", "external_id": "room-a", "entity_id": "room-a"},
+    {"source": "room-system", "external_id": "room-b", "entity_id": "room-b"},
+    {"source": "visit-system", "external_id": "patient-1", "entity_id": "patient-1"},
+    {"source": "visit-system", "external_id": "patient-2", "entity_id": "patient-2"}
+  ],
+  "slots": [
+    {"site": "site-1", "room": "room-a", "day": "2026-11-10", "session": "morning", "seats": 3},
+    {"site": "site-1", "room": "room-b", "day": "2026-11-10", "session": "morning", "seats": 2},
+    {"site": "site-1", "room": "room-a", "day": "2026-11-10", "session": "afternoon", "seats": 2}
   ],
   "events": [
     {
@@ -22,8 +33,100 @@
       "entity": "external-1",
       "occurred_at": "2026-11-01T10:00:00+08:00",
       "observed_at": "2026-11-01T11:00:00+08:00",
+      "payload": {"amount": 3}
+    },
+    {
+      "source": "booking-system",
+      "event_id": "appt-1",
+      "revision": 1,
+      "kind": "booking",
+      "entity": "patient-1",
+      "occurred_at": "2026-11-06T09:00:00+08:00",
+      "observed_at": "2026-11-06T09:30:00+08:00",
       "payload": {
-        "amount": 3
+        "patient_id": "P-001", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "status": "booked", "room": "room-a",
+        "scheduled_at": "2026-11-10T09:00:00+08:00"
+      }
+    },
+    {
+      "source": "booking-system",
+      "event_id": "appt-2",
+      "revision": 1,
+      "kind": "booking",
+      "entity": "patient-2",
+      "occurred_at": "2026-11-07T14:00:00+08:00",
+      "observed_at": "2026-11-07T14:30:00+08:00",
+      "payload": {
+        "patient_id": "P-002", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "status": "booked", "room": "room-b",
+        "scheduled_at": "2026-11-10T10:00:00+08:00"
+      }
+    },
+    {
+      "source": "booking-system",
+      "event_id": "appt-2",
+      "revision": 2,
+      "kind": "booking",
+      "entity": "patient-2",
+      "occurred_at": "2026-11-07T14:00:00+08:00",
+      "observed_at": "2026-11-10T07:30:00+08:00",
+      "payload": {
+        "patient_id": "P-002", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "status": "cancelled", "room": "room-b",
+        "scheduled_at": "2026-11-10T10:00:00+08:00"
+      }
+    },
+    {
+      "source": "booking-system",
+      "event_id": "appt-3",
+      "revision": 1,
+      "kind": "booking",
+      "entity": "patient-3",
+      "occurred_at": "2026-11-08T16:00:00+08:00",
+      "observed_at": "2026-11-08T16:30:00+08:00",
+      "payload": {
+        "patient_id": "P-003", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "status": "waitlisted"
+      }
+    },
+    {
+      "source": "booking-system",
+      "event_id": "appt-4",
+      "revision": 1,
+      "kind": "booking",
+      "entity": "patient-4",
+      "occurred_at": "2026-11-08T17:00:00+08:00",
+      "observed_at": "2026-11-08T17:30:00+08:00",
+      "payload": {
+        "patient_id": "P-004", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "status": "rejected"
+      }
+    },
+    {
+      "source": "room-system",
+      "event_id": "room-1",
+      "revision": 1,
+      "kind": "room",
+      "entity": "room-b",
+      "occurred_at": "2026-11-09T19:00:00+08:00",
+      "observed_at": "2026-11-09T19:30:00+08:00",
+      "payload": {
+        "site": "site-1", "room": "room-b", "day": "2026-11-10",
+        "session": "morning", "status": "suspended", "seats_adjustment": 2
+      }
+    },
+    {
+      "source": "visit-system",
+      "event_id": "visit-1",
+      "revision": 1,
+      "kind": "visit",
+      "entity": "patient-1",
+      "occurred_at": "2026-11-10T09:05:00+08:00",
+      "observed_at": "2026-11-10T09:20:00+08:00",
+      "payload": {
+        "patient_id": "P-001", "site": "site-1", "day": "2026-11-10",
+        "session": "morning", "outcome": "arrived", "appointment_id": "appt-1"
       }
     }
   ]
