@@ -1,0 +1,8 @@
+{
+  "name": "门诊预约运营",
+  "event_kinds": [
+    "booking",
+    "visit",
+    "room"
+  ]
+}
